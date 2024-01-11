@@ -166,7 +166,7 @@ app.post("/api/users", async (req, res) => {
 });
 mercadopago.configure({
   access_token:
-    "TEST-1883969381916870-010923-95908d7a70ab03a3b9c6d4f6f8f43739-207725092",
+    "",
 });
 
 app.post("/mercadopago", async (req, res) => {
@@ -201,7 +201,7 @@ app.post("/mercadopago", async (req, res) => {
     res.status(500).json({ message: "error en el post" });
   }
 });
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 const llemaralaapiComprarProducto = async (caritoDeCompras, nombre) => {
   const apiUrl = "http://localhost:3001/producBought";
@@ -209,19 +209,15 @@ const llemaralaapiComprarProducto = async (caritoDeCompras, nombre) => {
     caritoDeCompras,
     nombre,
   };
-  axios
-    .post(apiUrl,dataBody)
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error(`Error al realizar la solicitud: ${error.message}`);
-    });
-  
+  const response = await fetch("http://localhost:3001/producBough", {
+    method: "POST",
+    body: dataBody,
+  });
+  const data = await response.json();
 };
-app.post("producBought", (req, res) => {
-  const { caritoDeCompras, nombre } = req.body;
+app.post("/producBought", (req, res) => {
   console.log(req.body);
+  res.status(200).send("Agregado con exito la compra");
 });
 app.listen(3001, () => {
   console.log(`corriendo por el puerto 3001`);
