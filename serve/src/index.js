@@ -33,7 +33,7 @@ const routerVentas = require("./routers/router-ventas.js");
 app.use("/", routerVentas);
 
 const routerPedidos = require("./routers/API-Pedidos.js");
-app.use("/", routerPedidos);
+app.use("/api", routerPedidos);
 
 app.listen(3001, () => {
   console.log(`corriendo por el puerto 3001`);
