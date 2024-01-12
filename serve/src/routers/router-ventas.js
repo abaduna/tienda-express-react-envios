@@ -1,14 +1,9 @@
 const express = require(`express`);
-const morgan = require("morgan");
 const database = require("./../db");
-const mysql = require("promise-mysql");
-const cors = require("cors"); // Importa el paquete cors
-const multer = require("multer");
-const fs = require("node:fs");
 const jwt = require("jsonwebtoken");
 const mercadopago = require("mercadopago");
 const fetch = require("node-fetch");
-
+const uniqid = require("uniqid");
 
 const routerVentas = express.Router();
 
@@ -76,7 +71,7 @@ const llemaralaapiComprarProducto = async (caritoDeCompras, nombre, total) => {
   console.log(`data`);
   console.log(data);
 };
-var uniqid = require("uniqid");
+
 
 routerVentas.post("/producBough", async (req, res) => {
   const id_orden = await uniqid();
