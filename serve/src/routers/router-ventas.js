@@ -7,8 +7,6 @@ const uniqid = require("uniqid");
 
 const routerVentas = express.Router();
 
-
-
 require("dotenv").config();
 mercadopago.configure({
   access_token: process.env.ACCESS_TOKEN,
@@ -34,15 +32,18 @@ routerVentas.post("/mercadopago", async (req, res) => {
       },
       auto_return: "approved",
     };
+    const respons = await mercadopago.preferences.create(preference);
+    console.log(respons.status); //201
     try {
       console.log(`dataBody ${(caritoDeCompras, nombre, total)}`);
-      await llemaralaapiComprarProducto(caritoDeCompras, nombre, total); // vaa tener que ser un useEffec()
+      if (respons.status === 201) {
+        await llemaralaapiComprarProducto(caritoDeCompras, nombre, total); // vaa tener que ser un useEffec()
+      }
     } catch (error) {
       console.log(`error en llemaralaapiComprarProducto ${error}`);
     }
 
-    const respons = await mercadopago.preferences.create(preference);
-    console.log(respons.status); //201
+    
 
     res.status(200).json(respons.response.init_point);
   } catch (error) {
@@ -50,7 +51,6 @@ routerVentas.post("/mercadopago", async (req, res) => {
     res.status(500).json({ message: "error en el post" });
   }
 });
-
 
 const llemaralaapiComprarProducto = async (caritoDeCompras, nombre, total) => {
   const dataBody = {
@@ -71,7 +71,6 @@ const llemaralaapiComprarProducto = async (caritoDeCompras, nombre, total) => {
   console.log(`data`);
   console.log(data);
 };
-
 
 routerVentas.post("/producBough", async (req, res) => {
   const id_orden = await uniqid();
@@ -122,4 +121,5 @@ const addTablaDeProductos = async (id_orden, caritoDeCompras) => {
     );
   }
 };
-module.exports = routerVentas
+
+module.exports = routerVentas;

@@ -66,10 +66,38 @@ routerPedidos.put("/pedidos/ModifyProduct/:id", async (req, res) => {
 });
 //cambio de estado
 
-routerPedidos.patch("/pedidos/ModifyStatus/:id",(req,res)=>{
+routerPedidos.patch("/pedidos/ModifyStatus/:id",async(req,res)=>{
+  const {estado} = req.body
+  const id_orden = req.params.id;
+  const connection = await database.getConnection();
   const SQLquery =
-  "INSERT INTO `tablaprincipalproductoscomprados` (estado) VALUES (?, ?, ?.?);";
+  "UPDATE `tablaprincipalproductoscomprados` SET estado = ? WHERE id_orden = ?;";
+try {
+  const result = await connection.query(SQLquery,[estado,id_orden]);
+  res.status(200).json({message:"modificacion de estado exitosa"});
+  
+} catch (error) {
+  console.error("Error en la consulta:", error);
+ 
+    res.status(500).json({ error: "Error en la consulta" });
+}
+  
 })
-
+//paneles especificos
+routerPedidos.get("/pedidos/entregados/:estado", async (req, res) => {
+  const estado = req.params.estado;
+  const connection = await database.getConnection();
+  try {
+    const result = await connection.query(
+      "SELECT * FROM tablaprincipalproductoscomprados WHERE estado= ? ORDER BY id DESC;",
+      [estado]
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error en la consulta:", error);
+    await connection.end();
+    res.status(500).json({ error: "Error en la consulta" });
+  }
+});
 
 module.exports = routerPedidos;

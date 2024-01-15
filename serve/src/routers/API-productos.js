@@ -1,7 +1,7 @@
 const express = require(`express`);
 const multer = require("multer");
 const database = require("./../db");
-
+const fs = require("fs"); // Corrected import statement
 const routerProductos = express.Router();
 //obtener productos
 routerProductos.get("/api/productos", async (req, res) => {
@@ -29,8 +29,9 @@ routerProductos.post(
     console.log(req.body);
     let { title, description, category, precio } = req.body;
     console.log(req.file);
+    console.log(req.file);
     const origianlNameee = saveImage(req.file);
-    let imagenurl = `http://localhost:3001/upload/${origianlNameee}`;
+    let imagenurl = `http://localhost:3001/${origianlNameee}`;
     try {
       const result = await connection.query(
         `INSERT INTO productos ( title, descripction,category,imagenurl,precio) VALUES (?,?,?,?,?);`,
@@ -47,7 +48,7 @@ routerProductos.post(
 
 function saveImage(file) {
   console.log(`file ${file}`);
-  const newPath = `./upload/-${file.originalname}`;
+  const newPath = `./upload/${file.originalname}`;
   fs.renameSync(file.path, newPath);
   let origianlNameee = file.originalname;
   return origianlNameee;

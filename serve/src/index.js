@@ -16,7 +16,7 @@ const upload = multer({
   dest: "upload/",
 });
 
-app.use("/upload", express.static("upload"));
+app.use( express.static("upload"));
 
 app.use(cors());
 app.use(morgan("dev"));
