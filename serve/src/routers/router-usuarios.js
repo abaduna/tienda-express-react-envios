@@ -1,6 +1,6 @@
 const database = require("./../db");
 const express = require(`express`);
-
+const jwt = require("jsonwebtoken");
 const routerUsuarios = express.Router();
 
 routerUsuarios.post("/api/users", async (req, res) => {
@@ -32,6 +32,7 @@ routerUsuarios.post("/api/users", async (req, res) => {
       res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error de la consulta" });
   }
 });
