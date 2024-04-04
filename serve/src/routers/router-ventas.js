@@ -27,8 +27,8 @@ routerVentas.post("/mercadopago", async (req, res) => {
       ],
 
       back_urls: {
-        success: "http://localhost:3000/felicitaciones",
-        failure: "http://localhost:3000/fallo",
+        success: `http://localhost:3000/felicitaciones/${nombre}`,
+        failure: "http://localhost:3000/CompraFalida",
       },
       auto_return: "approved",
     };

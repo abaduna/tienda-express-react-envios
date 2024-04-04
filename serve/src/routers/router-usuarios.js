@@ -6,9 +6,9 @@ const routerUsuarios = express.Router();
 routerUsuarios.post("/api/users", async (req, res) => {
   let { username, password } = req.body;
   console.log(req.body);
-
-  const consult = `SELECT * FROM login WHERE username=? and password=? ;`;
   const connection = await database.getConnection();
+  const consult = `SELECT * FROM login WHERE username=? and password=? ;`;
+
   try {
     const result = await connection.query(consult, [username, password]);
     console.log("try");
@@ -25,8 +25,7 @@ routerUsuarios.post("/api/users", async (req, res) => {
           expiresIn: "3h",
         }
       );
-      console.log("token", token);
-      console.log(result);
+      console.log("token", token)
       res.status(200).send({ token });
     } else {
       res.status(404).json({ mensaje: "Usuario no encontrado" });
