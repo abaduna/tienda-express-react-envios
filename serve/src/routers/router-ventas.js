@@ -13,7 +13,8 @@ mercadopago.configure({
 });
 routerVentas.post("/mercadopago", async (req, res) => {
   const { data } = req.body;
-  const { total, caritoDeCompras, nombre } = data;
+  console.log(req.body);
+  const { total, caritoDeCompras, name, phone, addres, city } = data;
   try {
     const preference = {
       items: [
@@ -27,7 +28,7 @@ routerVentas.post("/mercadopago", async (req, res) => {
       ],
 
       back_urls: {
-        success: `http://localhost:3000/felicitaciones/${nombre}`,
+        success: `http://localhost:3000/felicitaciones/${name}`,
         failure: "http://localhost:3000/CompraFalida",
       },
       auto_return: "approved",
@@ -35,28 +36,45 @@ routerVentas.post("/mercadopago", async (req, res) => {
     const respons = await mercadopago.preferences.create(preference);
     console.log(respons.status); //201
     try {
-      console.log(`dataBody ${(caritoDeCompras, nombre, total)}`);
+      console.log(
+        `dataBody ${(total, caritoDeCompras, name, phone, addres, city)}`
+      );
       if (respons.status === 201) {
-        await llemaralaapiComprarProducto(caritoDeCompras, nombre, total); // vaa tener que ser un useEffec()
+        await llemaralaapiComprarProducto(
+          total,
+          caritoDeCompras,
+          name,
+          phone,
+          addres,
+          city
+        ); // vaa tener que ser un useEffec()
       }
     } catch (error) {
       console.log(`error en llemaralaapiComprarProducto ${error}`);
     }
 
-    
-
     res.status(200).json(respons.response.init_point);
   } catch (error) {
-    console.log(error.menssage);
+    console.log(error);
     res.status(500).json({ message: "error en el post" });
   }
 });
 
-const llemaralaapiComprarProducto = async (caritoDeCompras, nombre, total) => {
+const llemaralaapiComprarProducto = async (
+  total,
+  caritoDeCompras,
+  name,
+  phone,
+  addres,
+  city
+) => {
   const dataBody = {
     caritoDeCompras,
-    nombre: nombre,
+    nombre: name,
     total,
+    phone,
+    addres,
+    city,
   };
   console.log(`dataBody`);
   console.log(dataBody);
@@ -75,32 +93,47 @@ const llemaralaapiComprarProducto = async (caritoDeCompras, nombre, total) => {
 routerVentas.post("/producBough", async (req, res) => {
   const id_orden = await uniqid();
   console.log(id_orden);
-  const { nombre, caritoDeCompras, total } = req.body;
+  const {
+    caritoDeCompras,
+    name,
+    total,
+    phone,
+    addres,
+    city,
+  } = req.body;
   console.log(`api /producBough`);
   console.log(req.body);
 
   console.log(`caritoDeCompras`);
   console.log(caritoDeCompras);
-  addTablaPrincipalProductosComprados(id_orden, nombre, total);
+  addTablaPrincipalProductosComprados(
+    id_orden,
+    name,
+    total,
+    phone,
+    addres,
+    city
+  );
   addTablaDeProductos(id_orden, caritoDeCompras);
 
   res.status(200).send("Agregado con exito la compra");
 });
-const addTablaPrincipalProductosComprados = async (id_orden, nombre, total) => {
+const addTablaPrincipalProductosComprados = async (
+  id_orden,
+  name,
+  total,
+  phone,
+  addres,
+  city
+) => {
   let cuando_fue_comprado = Date.now(); //numero en millisegundos pasar a fecha desde 1 de enero 1970
-  console.log(cuando_fue_comprado);
   const estado = "por entregar";
   const connection = await database.getConnection();
-  console.log(nombre);
-  console.log(cuando_fue_comprado);
-  console.log(id_orden);
-  console.log(estado);
-  console.log(total);
 
   try {
     const consult =
-      "INSERT INTO `tablaprincipalproductoscomprados` (`nombre`, `cuando_fue_comprado`, `id_orden`,`estado`,`total`) VALUES (?,?,?,?,?);";
-    const variables = [nombre, cuando_fue_comprado, id_orden, estado, total];
+      "INSERT INTO `tablaprincipalproductoscomprados` (`nombre`, `cuando_fue_comprado`, `id_orden`,`estado`,`total`,`phone`,`addres`,`city`) VALUES (?,?,?,?,?,?,?,?);";
+    const variables = [name, cuando_fue_comprado, id_orden, estado, total,phone,addres,city];
     await connection.query(consult, variables);
   } catch (error) {
     console.log(error);
