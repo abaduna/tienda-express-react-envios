@@ -16,13 +16,16 @@ routerVentas.post("/mercadopago", async (req, res) => {
   console.log(req.body);
   const { total, caritoDeCompras, name, phone, addres, city } = data;
   try {
+    
     const preference = {
+      
       items: [
+        
         {
-          title: "no tiene titulo",
+          title: "tu compra",
           unit_price: total,
           currency_id: "ARS",
-          description: "no tiene descrption",
+          description: " ",
           quantity: 1,
         },
       ],
