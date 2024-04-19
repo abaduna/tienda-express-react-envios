@@ -13,7 +13,7 @@ mercadopago.configure({
 });
 routerVentas.post("/mercadopago", async (req, res) => {
   const { data } = req.body;
-  console.log(req.body);
+  
   const { total, caritoDeCompras, name, phone, addres, city } = data;
   try {
     
@@ -31,13 +31,15 @@ routerVentas.post("/mercadopago", async (req, res) => {
       ],
 
       back_urls: {
-        success: `http://localhost:3000/felicitaciones/${name}`,
+        success: `http://localhost:3000/felicitaciones/${name}/`,
         failure: "http://localhost:3000/CompraFalida",
       },
       auto_return: "approved",
+      notification_url:"https://4953-190-195-87-149.ngrok-free.app/webhoock"
     };
     const respons = await mercadopago.preferences.create(preference);
-    console.log(respons.status); //201
+    console.log("respons",respons);
+    
     try {
       console.log(
         `dataBody ${(total, caritoDeCompras, name, phone, addres, city)}`
@@ -79,8 +81,7 @@ const llemaralaapiComprarProducto = async (
     addres,
     city,
   };
-  console.log(`dataBody`);
-  console.log(dataBody);
+  
   const response = await fetch("http://localhost:3001/producBough", {
     method: "POST",
     body: JSON.stringify(dataBody),
@@ -89,13 +90,17 @@ const llemaralaapiComprarProducto = async (
     },
   });
   const data = await response.json();
-  console.log(`data`);
-  console.log(data);
+  ;
 };
-
+routerVentas.post("/webhoock",async(req,res)=>{
+  const payment = req.query
+  console.log({payment});
+  const paymentId =req.query.id
+  res.status(200)
+})
 routerVentas.post("/producBough", async (req, res) => {
   const id_orden = await uniqid();
-  console.log(id_orden);
+  
   const {
     caritoDeCompras,
     name,
@@ -104,11 +109,9 @@ routerVentas.post("/producBough", async (req, res) => {
     addres,
     city,
   } = req.body;
-  console.log(`api /producBough`);
-  console.log(req.body);
+  
 
-  console.log(`caritoDeCompras`);
-  console.log(caritoDeCompras);
+ 
   addTablaPrincipalProductosComprados(
     id_orden,
     name,
@@ -144,8 +147,7 @@ const addTablaPrincipalProductosComprados = async (
 };
 const addTablaDeProductos = async (id_orden, caritoDeCompras) => {
   const connection = await database.getConnection();
-  console.log(`caritoDeCompras`);
-  console.log(caritoDeCompras);
+  
   // for (const producto of caritoDeCompras) {
   //   await connection.execute('INSERT INTO tabladeproductos (id_orden, nombre, precio,descripcion) VALUES (?, ?, ?, ?)', [id_orden, producto.title, producto.precio, producto.descripction]);
   // }}
