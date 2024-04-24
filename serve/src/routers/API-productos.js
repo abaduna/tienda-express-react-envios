@@ -27,15 +27,15 @@ routerProductos.post(
   async (req, res) => {
     const connection = await database.getConnection();
     console.log(req.body);
-    let { title, description, category, precio } = req.body;
+    let { title, description, category, precio,weight } = req.body;
     console.log(req.file);
     console.log(req.file);
     const origianlNameee = saveImage(req.file);
     let imagenurl = `http://localhost:3001/${origianlNameee}`;
     try {
       const result = await connection.query(
-        `INSERT INTO productos ( title, descripction,category,imagenurl,precio) VALUES (?,?,?,?,?);`,
-        [title, description, category, imagenurl, precio]
+        `INSERT INTO productos ( title, descripction,category,imagenurl,precio,weight) VALUES (?,?,?,?,?,?);`,
+        [title, description, category, imagenurl, precio,weight]
       );
       res.status(200).json({ message: "salio bien" });
     } catch (error) {

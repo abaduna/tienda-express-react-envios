@@ -3,3 +3,4 @@ pasar el tiempo de milisegundos a fecha y hora
 
 
 no se puede agregar varias cosas en el carrito
+lazy loading
