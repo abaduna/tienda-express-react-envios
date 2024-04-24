@@ -26,7 +26,7 @@ routerVentas.post("/mercadopago", async (req, res) => {
           quantity: 1,
         },
       ],
-      notification_url: `https://776a-190-195-87-149.ngrok-free.app/notificar/${id}`,
+      notification_url: `https://e940-190-195-87-149.ngrok-free.app/notificar/${id}`,
       back_urls: {
         success: `http://localhost:3000/felicitaciones/${name}/`,
         failure: "http://localhost:3000/CompraFalida",
