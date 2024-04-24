@@ -1,2 +1,4 @@
 hacer que te deridija a un formulario con un resumen de las compras
 pasar el tiempo de milisegundos a fecha y hora
+
+cuando_fue_comprado = id = al que se agrega si esta pagado
