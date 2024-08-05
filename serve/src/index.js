@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const database = require("./db");
-const mysql = require("promise-mysql");
+const path = require('path');
 const cors = require("cors");
 const multer = require("multer");
 const fs = require("fs"); // Corrected import statement
@@ -35,6 +35,17 @@ app.use("/", routerVentas);
 const routerPedidos = require("./routers/API-Pedidos.js");
 app.use("/api", routerPedidos);
 
-app.listen(3001, () => {
+// Servir los archivos estáticos de la carpeta build de React
+app.use(express.static(path.join(__dirname, '../build')));
+
+
+// Manejar todas las rutas y devolver el archivo index.html de React
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+require("dotenv").config();
+const PORT =  3001
+app.listen(PORT, () => {
   console.log(`corriendo por el puerto 3001`);
 });

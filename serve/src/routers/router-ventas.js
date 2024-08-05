@@ -26,10 +26,10 @@ routerVentas.post("/mercadopago", async (req, res) => {
           quantity: 1,
         },
       ],
-      notification_url: `https://e940-190-195-87-149.ngrok-free.app/notificar/${id}`,
+      notification_url: `https://391f-190-195-87-149.ngrok-free.app/notificar/${id}`,
       back_urls: {
-        success: `http://localhost:3000/felicitaciones/${name}/`,
-        failure: "http://localhost:3000/CompraFalida",
+        success: `http://localhost:3001/felicitaciones/${name}/`,
+        failure: "http://localhost:3001/CompraFalida",
       },
       auto_return: "approved",
     };
@@ -64,7 +64,7 @@ const llemaralaapiComprarProducto = async (
 ) => {
   const dataBody = {
     caritoDeCompras,
-    nombre: name,
+    name,
     total,
     phone,
     addres,
@@ -86,11 +86,14 @@ const llemaralaapiComprarProducto = async (
   }
  */
 routerVentas.post("/notificar/:id", async (req, res) => {
+  console.log('**notificar:', req.params.id)
   try {
     const idItem = req.params.id;
-    console.log(idItem);
+    
     const { type, data } = req.body;
-    console.log(data);
+     (data);
+     console.log('--type--', type)
+     console.log('--data--', data)
     switch (type) {
       case "payment": {
         const paymentId = data.id;
@@ -109,6 +112,9 @@ routerVentas.post("/notificar/:id", async (req, res) => {
             console.log(`error`);
             console.log(error);
           }
+          
+        }else{
+          console.log("else");
           
         }
         break;
@@ -202,7 +208,7 @@ if (sha === hash) {
 })
 */
 routerVentas.post("/producBough", async (req, res) => {
-  console.log(`producBough`);
+
   const id_orden = await uniqid();
 
   const { caritoDeCompras, name, total, phone, addres, city, id } = req.body;
