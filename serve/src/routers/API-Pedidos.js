@@ -48,6 +48,7 @@ routerPedidos.put("/pedidos/ModifyProductList/:id", async (req, res) => {
     res.status(500).json({ error: "Error en la consulta" });
   }
 });
+//sdfgfhsdgkhusdgksdglsdglkh.usdglkh.ufsdglkh.ufsdglkh.ufsdglhfsdglkhufsdgfsdglkhufsdglh abaajo este bien
 routerPedidos.put("/pedidos/ModifyProduct/:id", async (req, res) => {
   const id_orden = req.params.id;
   const { nombre, total, descripcion } = req.body;

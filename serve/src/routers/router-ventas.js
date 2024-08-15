@@ -72,7 +72,7 @@ const llemaralaapiComprarProducto = async (
     id,
   };
 
-  const response = await fetch("http://localhost:3001/producBough", {
+  const response = await fetch("http://localhost:3001/", {
     method: "POST",
     body: JSON.stringify(dataBody),
     headers: {
@@ -160,53 +160,7 @@ routerVentas.post("/notificar/:id", async (req, res) => {
     res.status(500).send("Error handling notification");
   }
 });
-/** 
- * 
- * // Obtain the x-signature and x-request-id from the request headers
-const xSignature = req.headers['x-signature'];
-const xRequestId = req.headers['x-request-id'];
 
-// Obtain query parameters from the request URL
-const queryParams = req.query;
-
-// Extract the "data.id" from the query params
-const dataID = queryParams['data.id'] || '';
-
-// Separate the x-signature into parts
-const parts = xSignature.split(',');
-
-let ts = null;
-let hash = null;
-
-// Iterate over the parts to obtain 'ts' and 'v1'
-for (const part of parts) {
-  const [key, value] = part.split('=').map(item => item.trim());
-  if (key === 'ts') {
-    ts = value;
-  } else if (key === 'v1') {
-    hash = value;
-  }
-}
-
-// Obtain the secret key for the user/application
-const secret = process.env.SECRET;
-
-// Generate the manifest string
-const manifest = `id:${dataID};request-id:${xRequestId};ts:${ts};`;
-
-// Create an HMAC signature defining the hash type and the key
-const sha = crypto.createHmac('sha256', secret).update(manifest).digest('hex');
-
-// Check if the calculated hash matches the given hash
-if (sha === hash) {
-  // HMAC verification passed
-  res.send("HMAC verification passed");
-} else {
-  // HMAC verification failed
-  res.status(400).send("HMAC verification failed");
-}
-})
-*/
 routerVentas.post("/producBough", async (req, res) => {
 
   const id_orden = await uniqid();
